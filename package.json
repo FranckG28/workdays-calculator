@@ -1,0 +1,25 @@
+{
+  "name": "workdays-calculator",
+  "version": "1.0.0",
+  "description": "Calculate total half-days worked by team members from Payfit calendar",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "workdays",
+    "calendar",
+    "payfit",
+    "retrospective"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-ical": "^0.19.0",
+    "inquirer": "^9.2.12",
+    "axios": "^1.6.2",
+    "date-fns": "^3.0.0"
+  }
+}
+
