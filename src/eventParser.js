@@ -1,5 +1,6 @@
-import { isDateInRange } from './utils.js';
+import { isDateInRange, isAllDayEvent } from './utils.js';
 import { CONFIG, EVENT_TITLE_PATTERN } from './config.js';
+import { startOfDay, endOfDay } from 'date-fns';
 
 /**
  * Parse an event title to extract type and member name
@@ -50,18 +51,40 @@ export function extractMemberNames(events) {
 }
 
 /**
- * Filter events by date range
+ * Filter events by date range (includes events that overlap with the range)
  * @param {Array} events - Array of iCal event objects
  * @param {Date} startDate - Start date (inclusive)
  * @param {Date} endDate - End date (inclusive)
  * @returns {Array} Filtered events
  */
 export function filterEventsByDateRange(events, startDate, endDate) {
+  const rangeStart = startOfDay(startDate);
+  const rangeEnd = endOfDay(endDate);
+
   return events.filter(event => {
     if (!event.start) return false;
-    
-    const eventStart = new Date(event.start);
-    return isDateInRange(eventStart, startDate, endDate);
+
+    const eventStart = startOfDay(new Date(event.start));
+
+    // Determine event's last active day
+    let eventLastDay;
+    if (isAllDayEvent(event) && event.end) {
+      // All-day events: end is exclusive, so last active day is end - 1 day
+      const rawEnd = startOfDay(new Date(event.end));
+      if (rawEnd > eventStart) {
+        eventLastDay = new Date(rawEnd);
+        eventLastDay.setDate(eventLastDay.getDate() - 1);
+      } else {
+        eventLastDay = eventStart;
+      }
+    } else if (event.end) {
+      eventLastDay = endOfDay(new Date(event.end));
+    } else {
+      eventLastDay = eventStart;
+    }
+
+    // Event overlaps range if it starts before range ends AND ends after range starts
+    return eventStart <= rangeEnd && eventLastDay >= rangeStart;
   });
 }
 
