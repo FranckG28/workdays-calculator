@@ -4,7 +4,7 @@ import { CONFIG } from './src/config.js';
 import { fetchCalendar, getEvents } from './src/calendarFetcher.js';
 import { extractMemberNames, getRelevantEvents } from './src/eventParser.js';
 import { calculateTotalHalfDays } from './src/workdaysCalculator.js';
-import { parseDate } from './src/utils.js';
+import { parseDate, formatDateLocal } from './src/utils.js';
 import { getHolidaysInRange, getHolidayName } from './src/holidays.js';
 import { readMembersFromFile } from './src/fileReader.js';
 
@@ -287,7 +287,7 @@ async function main() {
     console.log('\n' + '='.repeat(60));
     console.log('📈 RESULTS (Copy-friendly format)');
     console.log('='.repeat(60));
-    console.log(`\nPeriod: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`);
+    console.log(`\nPeriod: ${formatDateLocal(startDate)} to ${formatDateLocal(endDate)}`);
     
     const holidaysText = workingDayHolidays.length > 0 
       ? `${result.weekdaysCount} (${workingDayHolidays.length} holidays)`

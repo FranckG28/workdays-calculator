@@ -1,8 +1,9 @@
-import { 
-  getWeekdaysInRange, 
+import {
+  getWeekdaysInRange,
   eventOverlapsDate,
   isFullWorkingDay,
-  getHalfDayInfo
+  getHalfDayInfo,
+  formatDateLocal
 } from './utils.js';
 import { getMemberEvents } from './eventParser.js';
 
@@ -84,7 +85,7 @@ export function calculateTotalHalfDays(events, memberNames, startDate, endDate, 
       memberHalfDays += halfDays;
       
       // Store breakdown by date
-      const dateKey = weekday.toISOString().split('T')[0];
+      const dateKey = formatDateLocal(weekday);
       breakdown[memberName].byDate[dateKey] = halfDays;
     }
     

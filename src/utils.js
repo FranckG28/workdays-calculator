@@ -223,6 +223,10 @@ export function eventOverlapsDate(event, date) {
  * @param {string} dateStr - Date string to parse
  * @returns {Date} Parsed date
  */
+export function formatDateLocal(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 export function parseDate(dateStr) {
   // Try ISO format first (YYYY-MM-DD)
   if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
